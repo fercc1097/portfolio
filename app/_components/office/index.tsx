@@ -7,6 +7,7 @@ import * as THREE from "three";
 import React from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
+import { sRGBEncoding } from "@react-three/drei/helpers/deprecated";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -97,11 +98,17 @@ type GLTFResult = GLTF & {
 
 export function Office(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGLTF("/models/scene.gltf") as GLTFResult;
-  const texture = useTexture("/textures/baked.jpg");
+  const texture = useTexture("textures/baked.jpg");
   texture.flipY = false;
+  texture.colorSpace = "srgb";
 
   const textureMaterial = new THREE.MeshStandardMaterial({
     map: texture,
+  });
+  const textureGlassMaterial = new THREE.MeshStandardMaterial({
+    map: texture,
+    transparent: true,
+    opacity: 0.42,
   });
   return (
     <group {...props} dispose={null}>
@@ -352,7 +359,7 @@ export function Office(props: JSX.IntrinsicElements["group"]) {
       <mesh
         name="Plane001_3"
         geometry={nodes.Plane001_3.geometry}
-        material={textureMaterial}
+        material={textureGlassMaterial}
       />
     </group>
   );
