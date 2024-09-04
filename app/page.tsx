@@ -1,11 +1,16 @@
 "use client";
-import styles from "./page.module.css";
-import Hero from "./_components/hero";
+import { Canvas } from "@react-three/fiber";
+import Experience from "./_components/experience";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <Hero />
-    </main>
+    <Canvas
+      style={{ width: "100vw", height: "100vh" }}
+      shadows
+      camera={{ position: [3, 3, 3], fov: 30 }}
+    >
+      <color attach="background" args={["#ececec"]} />
+      <Experience />
+    </Canvas>
   );
 }

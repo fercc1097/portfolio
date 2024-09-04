@@ -36,12 +36,20 @@ type GLTFResult = GLTF & {
     Wolf3D_Teeth: THREE.MeshStandardMaterial;
   };
   animations: THREE.AnimationClip[];
+  animation: THREE.AnimationClip;
 };
 
-export function Avatar(props: JSX.IntrinsicElements["group"]) {
-  const { headFollow, cursorFollow } = useControls({
+interface Props {
+  animation: string;
+  // Other custom properties...
+}
+
+export function Avatar(props: JSX.IntrinsicElements["group"] & Props) {
+  const { animation } = props;
+  const { headFollow, cursorFollow, wireframe } = useControls({
     headFollow: { value: false, label: "Head Follow Camera" },
     cursorFollow: { value: false, label: "Cursor Follow" },
+    wireframe: { value: false, label: "Wireframe" },
   });
   const group = React.useRef<THREE.Group<THREE.Object3DEventMap>>(
     new THREE.Group()
@@ -52,8 +60,15 @@ export function Avatar(props: JSX.IntrinsicElements["group"]) {
   const { nodes, materials } = useGraph(clone) as GLTFResult;
 
   const { animations: typingAninmation } = useFBX("animations/typing.fbx");
+  const { animations: fallingAnimation } = useFBX("animations/falling.fbx");
+  const { animations: standingAnimation } = useFBX("animations/standing.fbx");
   typingAninmation[0].name = "Typing";
-  const { actions } = useAnimations(typingAninmation, group);
+  fallingAnimation[0].name = "Falling";
+  standingAnimation[0].name = "Standing";
+  const { actions } = useAnimations(
+    [typingAninmation[0], fallingAnimation[0], standingAnimation[0]],
+    group
+  );
 
   useFrame((state) => {
     if (headFollow) {
@@ -65,8 +80,24 @@ export function Avatar(props: JSX.IntrinsicElements["group"]) {
     }
   });
   useEffect(() => {
-    actions["Typing"]?.reset().play();
-  }, [actions]);
+    const action = actions[animation];
+    if (action) {
+      action.reset().fadeIn(0.5).play();
+    }
+
+    return () => {
+      if (action) {
+        action.fadeOut(0.5).play(); // Start fading out
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animation]);
+
+  useEffect(() => {
+    Object.values(materials).forEach((material) => {
+      material.wireframe = wireframe ? true : false;
+    });
+  }, [wireframe]);
 
   return (
     <group rotation={[-Math.PI / 2, 0, 0]}>
