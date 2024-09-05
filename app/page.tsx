@@ -1,7 +1,7 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
 import Experience from "./_components/experience";
-import { Loader, Scroll, ScrollControls } from "@react-three/drei";
+import { Scroll, ScrollControls } from "@react-three/drei";
 import Interface from "./_components/interface";
 import ScrollManager from "./_components/scroll-manager";
 import { useEffect, useState } from "react";
@@ -36,7 +36,7 @@ export default function Home() {
           <ScrollControls pages={4} damping={0.1}>
             <ScrollManager section={section} setSection={setSection} />
             <Scroll>
-              <Experience section={section} isMenuOpen={isMenuOpen} />
+              <Experience isMenuOpen={isMenuOpen} />
             </Scroll>
             <Scroll html>
               <Interface />
