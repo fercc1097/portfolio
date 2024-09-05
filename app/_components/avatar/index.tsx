@@ -47,9 +47,9 @@ interface Props {
 export function Avatar(props: JSX.IntrinsicElements["group"] & Props) {
   const { animation } = props;
   const { headFollow, cursorFollow, wireframe } = useControls({
-    headFollow: { value: false, label: "Head Follow Camera" },
-    cursorFollow: { value: false, label: "Cursor Follow" },
-    wireframe: { value: false, label: "Wireframe" },
+    headFollow: false,
+    cursorFollow: false,
+    wireframe: false,
   });
   const group = React.useRef<THREE.Group<THREE.Object3DEventMap>>(
     new THREE.Group()
@@ -90,8 +90,7 @@ export function Avatar(props: JSX.IntrinsicElements["group"] & Props) {
         action.fadeOut(0.5).play(); // Start fading out
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [animation]);
+  }, [actions, animation]);
 
   useEffect(() => {
     Object.values(materials).forEach((material) => {

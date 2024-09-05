@@ -6,9 +6,9 @@ const AboutSection = () => {
   return (
     <Section>
       <h1 className="text-6xl font-extrabold leading-snug">
-        Hi, I&apos;m
+        Hi!, I&apos;m
         <br />
-        <span className="bg-white px-1 italic">Wawa Sensei</span>
+        <span className="bg-slate-900 px-1 italic">Fernando Castelán</span>
       </h1>
       <motion.p
         className="text-lg text-gray-600 mt-4"
@@ -25,9 +25,9 @@ const AboutSection = () => {
           delay: 1.5,
         }}
       >
-        I make YouTube videos to help developers
+        6+ Years Full Stack Web Developer
         <br />
-        learn how to build 3D apps
+        Frontend oriented with Next.js and React
       </motion.p>
       <motion.button
         className={`bg-indigo-600 text-white py-4 px-8 

@@ -4,10 +4,12 @@ Command: npx gltfjsx@6.5.0 public/models/scene.gltf -t -k
 */
 
 import * as THREE from "three";
-import React from "react";
+import React, { useEffect } from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
-import { sRGBEncoding } from "@react-three/drei/helpers/deprecated";
+import { motion } from "framer-motion-3d";
+import { animate, useMotionValue } from "framer-motion";
+import { useFrame } from "@react-three/fiber";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -96,20 +98,37 @@ type GLTFResult = GLTF & {
   animations: THREE.AnimationClip[];
 };
 
-export function Office(props: JSX.IntrinsicElements["group"]) {
-  const { nodes, materials } = useGLTF("/models/scene.gltf") as GLTFResult;
+export function Office(
+  props: JSX.IntrinsicElements["group"] & { section: number }
+) {
+  const { nodes } = useGLTF("/models/scene.gltf") as GLTFResult;
   const texture = useTexture("textures/baked.jpg");
   texture.flipY = false;
   texture.colorSpace = "srgb";
 
   const textureMaterial = new THREE.MeshStandardMaterial({
     map: texture,
+    transparent: true,
+    opacity: 1,
   });
   const textureGlassMaterial = new THREE.MeshStandardMaterial({
     map: texture,
     transparent: true,
     opacity: 0.42,
   });
+  const textureOpacity = useMotionValue(0);
+  const glassOpacity = useMotionValue(0);
+
+  useEffect(() => {
+    animate(textureOpacity, props.section === 0 ? 1 : 0);
+    animate(glassOpacity, props.section === 0 ? 0.42 : 0);
+  }, [props.section]);
+
+  useFrame(() => {
+    textureMaterial.opacity = textureOpacity.get();
+    textureGlassMaterial.opacity = glassOpacity.get();
+  });
+
   return (
     <group {...props} dispose={null}>
       <group
@@ -155,7 +174,14 @@ export function Office(props: JSX.IntrinsicElements["group"]) {
           material={textureMaterial}
         />
       </group>
-      <group name="LavaLamp" position={[-1.302, 2.071, -1.986]}>
+      <motion.group
+        scale={[0, 0, 0]}
+        animate={{
+          scale: props.section === 0 ? 1 : 0,
+        }}
+        name="LavaLamp"
+        position={[-1.302, 2.071, -1.986]}
+      >
         <mesh
           name="Node-Mesh001"
           geometry={nodes["Node-Mesh001"].geometry}
@@ -171,14 +197,22 @@ export function Office(props: JSX.IntrinsicElements["group"]) {
           geometry={nodes["Node-Mesh001_2"].geometry}
           material={textureMaterial}
         />
-      </group>
-      <mesh
+      </motion.group>
+      <motion.mesh
+        scale={[0, 0, 0]}
+        animate={{
+          scale: props.section === 0 ? 1 : 0,
+        }}
         name="WawaRug"
         geometry={nodes.WawaRug.geometry}
         material={textureMaterial}
         position={[-0.281, 0.009, 0.765]}
       />
-      <group
+      <motion.group
+        scale={[0, 0, 0]}
+        animate={{
+          scale: props.section === 0 ? 1 : 0,
+        }}
         name="salameche"
         position={[-0.61, 2.044, -1.958]}
         rotation={[-Math.PI, 0.728, -Math.PI]}
@@ -213,11 +247,12 @@ export function Office(props: JSX.IntrinsicElements["group"]) {
           geometry={nodes.mesh434900071_5.geometry}
           material={textureMaterial}
         />
-      </group>
+      </motion.group>
       <group
         name="keyboard"
-        position={[-0.044, 0.981, -1.346]}
-        rotation={[0, -0.165, 0]}
+        position={[0.215, 0.981, -1.215]}
+        rotation={[0, -0.224, 0]}
+        scale={0.63}
       >
         <mesh
           name="mesh425587018"
@@ -240,7 +275,11 @@ export function Office(props: JSX.IntrinsicElements["group"]) {
           material={textureMaterial}
         />
       </group>
-      <group
+      <motion.group
+        scale={[0, 0, 0]}
+        animate={{
+          scale: props.section === 0 ? 1 : 0,
+        }}
         name="iMac"
         position={[0.454, 0.939, -1.723]}
         rotation={[Math.PI, -1.099, Math.PI]}
@@ -260,13 +299,21 @@ export function Office(props: JSX.IntrinsicElements["group"]) {
           geometry={nodes.iMac_1_2.geometry}
           material={textureMaterial}
         />
-      </group>
+      </motion.group>
       <mesh
         name="Comp_Mouse"
         geometry={nodes.Comp_Mouse.geometry}
         material={textureMaterial}
+        position={[-0.008, 0, 0.076]}
       />
-      <group name="plant" position={[-0.78, 1.071, -1.61]}>
+      <motion.group
+        scale={[0, 0, 0]}
+        animate={{
+          scale: props.section === 0 ? 1 : 0,
+        }}
+        name="plant"
+        position={[-0.78, 1.071, -1.61]}
+      >
         <mesh
           name="mesh24448074"
           geometry={nodes.mesh24448074.geometry}
@@ -282,8 +329,12 @@ export function Office(props: JSX.IntrinsicElements["group"]) {
           geometry={nodes.mesh24448074_2.geometry}
           material={textureMaterial}
         />
-      </group>
-      <group
+      </motion.group>
+      <motion.group
+        scale={[0, 0, 0]}
+        animate={{
+          scale: props.section === 0 ? 1 : 0,
+        }}
         name="Houseplant_7"
         position={[-2.019, -0.042, -1.526]}
         rotation={[-Math.PI / 2, 0, 0]}
@@ -303,8 +354,12 @@ export function Office(props: JSX.IntrinsicElements["group"]) {
           geometry={nodes.Houseplant_7_3.geometry}
           material={textureMaterial}
         />
-      </group>
-      <group
+      </motion.group>
+      <motion.group
+        scale={[0, 0, 0]}
+        animate={{
+          scale: props.section === 0 ? 1 : 0,
+        }}
         name="palm_tree_01"
         position={[2.13, -0.081, -1.055]}
         rotation={[-Math.PI, 0.672, -Math.PI]}
@@ -324,11 +379,15 @@ export function Office(props: JSX.IntrinsicElements["group"]) {
           geometry={nodes["palm_tree_01-Mesh_2"].geometry}
           material={textureMaterial}
         />
-      </group>
-      <group
+      </motion.group>
+      <motion.group
+        scale={[0, 0, 0]}
+        animate={{
+          scale: props.section === 0 ? 1 : 0,
+        }}
         name="Chair"
-        position={[-0.278, 0, -0.708]}
-        rotation={[0, -0.376, 0]}
+        position={[0.089, 0, -0.664]}
+        rotation={[0, -0.35, 0]}
       >
         <mesh
           name="Node-Mesh"
@@ -340,7 +399,7 @@ export function Office(props: JSX.IntrinsicElements["group"]) {
           geometry={nodes["Node-Mesh_1"].geometry}
           material={textureMaterial}
         />
-      </group>
+      </motion.group>
       <mesh
         name="Plane001"
         geometry={nodes.Plane001.geometry}
